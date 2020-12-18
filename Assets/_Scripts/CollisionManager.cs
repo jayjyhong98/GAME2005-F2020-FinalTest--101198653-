@@ -50,11 +50,9 @@ public class CollisionManager : MonoBehaviour
                 {
                     CheckSphereAABB(sphere, cube);
                 }
-                
+
             }
         }
-
-
     }
 
     public static void CheckSphereAABB(BulletBehaviour s, CubeBehaviour b)
@@ -153,11 +151,29 @@ public class CollisionManager : MonoBehaviour
                     face = faces[i];
                 }
             }
-            
+
             // set the contact properties
             contactB.face = face;
             contactB.penetration = penetration;
 
+            if (face.y == 0.0f)
+            {
+                PlayerBehaviour player = FindObjectOfType<PlayerBehaviour>();
+
+                Vector3 velocity = player.body.velocity * 1.1f;
+                velocity.y = 0.0f;
+
+                if (a == player.cube)
+                {
+                    b.transform.position += velocity;
+                }
+
+                else if (b == player.cube)
+                {
+                    a.transform.position += velocity;
+                }
+            }
+            
 
             // check if contact does not exist
             if (!a.contacts.Contains(contactB))
@@ -181,7 +197,6 @@ public class CollisionManager : MonoBehaviour
                 // add the new contact
                 a.contacts.Add(contactB);
                 a.isColliding = true;
-                
             }
         }
         else
@@ -200,4 +215,5 @@ public class CollisionManager : MonoBehaviour
             }
         }
     }
+
 }
