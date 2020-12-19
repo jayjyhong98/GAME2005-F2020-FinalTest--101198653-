@@ -55,7 +55,7 @@ public class PlayerBehaviour : MonoBehaviour
                 body.velocity = playerCam.transform.forward * speed * Time.deltaTime;
             }
 
-            if (Input.GetAxisRaw("Vertical") < 0.0f) 
+            if (Input.GetAxisRaw("Vertical") < 0.0f)
             {
                 // move Back
                 body.velocity = -playerCam.transform.forward * speed * Time.deltaTime;
@@ -63,7 +63,6 @@ public class PlayerBehaviour : MonoBehaviour
 
             body.velocity = Vector3.Lerp(body.velocity, Vector3.zero, 0.9f);
             body.velocity = new Vector3(body.velocity.x, 0.0f, body.velocity.z); // remove y
-            
 
             if (Input.GetAxisRaw("Jump") > 0.0f)
             {
