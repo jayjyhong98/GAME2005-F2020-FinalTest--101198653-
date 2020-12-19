@@ -48,7 +48,7 @@ public class CollisionManager : MonoBehaviour
             {
                 if (cube.name != "Player")
                 {
-                    CheckSphereAABB(sphere, cube);
+                    CheckBulletAABB(sphere, cube);
                 }
 
             }
@@ -101,7 +101,48 @@ public class CollisionManager : MonoBehaviour
         }
 
     }
-    
+
+    public static void CheckBulletAABB(BulletBehaviour s, CubeBehaviour b)
+    {
+        CubeBehaviour a = s.GetComponent<CubeBehaviour>();
+
+        if ((a.min.x <= b.max.x && a.max.x >= b.min.x) &&
+            (a.min.y <= b.max.y && a.max.y >= b.min.y) &&
+            (a.min.z <= b.max.z && a.max.z >= b.min.z))
+        {
+            // determine the distances between the contact extents
+            float[] distances = {
+                (b.max.x - a.min.x),
+                (a.max.x - b.min.x),
+                (b.max.y - a.min.y),
+                (a.max.y - b.min.y),
+                (b.max.z - a.min.z),
+                (a.max.z - b.min.z)
+            };
+
+            float penetration = float.MaxValue;
+            Vector3 face = Vector3.zero;
+
+            // check each face to see if it is the one that connected
+            for (int i = 0; i < 6; i++)
+            {
+                if (distances[i] < penetration)
+                {
+                    // determine the penetration distance
+                    penetration = distances[i];
+                    face = faces[i];
+                }
+            }
+
+            s.penetration = penetration;
+            s.collisionNormal = face;
+            //s.isColliding = true;
+
+
+            Reflect(s);
+        }
+    }
+
     // This helper function reflects the bullet when it hits an AABB face
     private static void Reflect(BulletBehaviour s)
     {
