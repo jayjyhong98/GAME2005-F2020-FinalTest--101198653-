@@ -165,12 +165,24 @@ public class CollisionManager : MonoBehaviour
 
                 if (a == player.cube)
                 {
-                    b.transform.position += velocity;
+                    RigidBody3D rigidBody = b.GetComponent<RigidBody3D>();
+
+                    if (rigidBody.bodyType == BodyType.DYNAMIC)
+                    {
+                        b.transform.position += velocity;
+                        return;
+                    }
                 }
 
                 else if (b == player.cube)
                 {
-                    a.transform.position += velocity;
+                    RigidBody3D rigidBody = a.GetComponent<RigidBody3D>();
+
+                    if (rigidBody.bodyType == BodyType.DYNAMIC)
+                    {
+                        a.transform.position += velocity;
+                        return;
+                    }
                 }
             }
             
